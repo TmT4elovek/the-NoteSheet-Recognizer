@@ -1,1 +1,0 @@
-SQLALCHEMY_DATABASE_URL = 'sqlite:///web/backend/music.db' # ссылка на дб
