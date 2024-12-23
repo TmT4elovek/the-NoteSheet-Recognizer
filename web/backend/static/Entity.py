@@ -21,6 +21,9 @@ class User(Base):
     password = Column(String(40), nullable=False)
     music_sheets = relationship('MusicSheet', back_populates='user', uselist=False)
 
+    def to_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
 
 class MusicSheet(Base):
     __tablename__ = 'music_sheet'
@@ -32,6 +35,8 @@ class MusicSheet(Base):
     user = relationship('User', back_populates='music_sheets', uselist=True)
     recognized_music_sheet = relationship('RecognizedMusicSheet', back_populates='music_sheet', uselist=False)
 
+    def to_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 class RecognizedMusicSheet(Base):
     __tablename__ = 'recognized_music_sheet'
@@ -41,6 +46,8 @@ class RecognizedMusicSheet(Base):
     sheet_id = Column(Integer, ForeignKey('music_sheet.id'))
     music_sheet = relationship('MusicSheet', back_populates='recognized_music_sheet', uselist=False)
 
+    def to_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 # создание всех таблиц
 # Base.metadata.create_all(engine)
