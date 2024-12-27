@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, create_engine
-from sqlalchemy.orm import DeclarativeBase, relationship
+from sqlalchemy.orm import DeclarativeBase, relationship, Session
 
 SQLALCHEMY_DATABASE_URL = 'sqlite:///D:\\Programming\mospredp\\the-NoteSheet-Recognizer\\web\\backend\\music.db' # ссылка на дб
 
@@ -19,7 +19,7 @@ class User(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(30), unique=True, nullable=False)
     password = Column(String(40), nullable=False)
-    music_sheets = relationship('MusicSheet', back_populates='user', uselist=False)
+    music_sheets = relationship('MusicSheet', back_populates='user', uselist=False, cascade='all, delete')
 
     def to_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
@@ -33,7 +33,7 @@ class MusicSheet(Base):
     music_sheet = Column(String, nullable=False) # имя файла в каталоге music_sheets
     title = Column(String(70), nullable=False)
     user = relationship('User', back_populates='music_sheets', uselist=True)
-    recognized_music_sheet = relationship('RecognizedMusicSheet', back_populates='music_sheet', uselist=False)
+    recognized_music_sheet = relationship('RecognizedMusicSheet', back_populates='music_sheet', uselist=False, cascade='all, delete')
 
     def to_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}

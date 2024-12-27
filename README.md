@@ -3,3 +3,6 @@
 Python - ? \
 Flask - ? \
 SQLAlchemy - ?
+
+## Swagger
+http://(adress)/docs
