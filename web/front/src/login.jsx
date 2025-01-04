@@ -8,7 +8,7 @@ function LogIn() {
         <h2>Login</h2>
         <div class="input-field">
           <input type="text" required></input>
-          <label>Enter your email</label>
+          <label>Enter your username</label>
         </div>
         <div class="input-field">
           <input type="password" required></input>
@@ -23,11 +23,11 @@ function LogIn() {
         </div>
         <button type="submit">Log In</button>
         <div class="register">
-          <p>Don't have an account? <a href="#">Register</a></p>
+          <p>Don't have an account? <a href="#">Sign up</a></p>
         </div>
       </form>
     </div>
-    </>
+    </> 
     )
 }
 
