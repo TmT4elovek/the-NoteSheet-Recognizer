@@ -6,11 +6,25 @@ from fastapi.responses import Response
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 
+import torchvision.transforms as tr
+from PIL import Image
+
+
 from static.Entity import MusicSheet, User, RecognizedMusicSheet, SQLALCHEMY_DATABASE_URL
 
 
 app = FastAPI()
 engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
+
+
+def predict(model, image, mode):
+    if mode == "staff":
+        prediction, _ = model(image.unsqueeze(0))
+        return prediction
+    if mode == "note":
+        _, prediction = model(image.unsqueeze(0))
+        return prediction
+
 
 @app.get('/api/get-user/{user_id}')
 async def get_user(user_id: int):
@@ -18,9 +32,10 @@ async def get_user(user_id: int):
         user = db.query(User).filter(User.id == user_id).first()
         return user
 
+
 @app.get('/api/get-recognized-music-sheet/{music_sheet_id}')
 async def get_recognized_music_sheet(music_sheet_id: int):
-    with Session(engine) as db:
+    with (Session(engine) as db):
         music_sheet = db.query(MusicSheet).filter(MusicSheet.id == music_sheet_id).first()
         recognized_music_sheet = db.query(RecognizedMusicSheet).filter(RecognizedMusicSheet.sheet_id == music_sheet_id).first()
         return {
@@ -28,10 +43,40 @@ async def get_recognized_music_sheet(music_sheet_id: int):
             "recognized_music_sheet": recognized_music_sheet.to_dict() if recognized_music_sheet else None
         }
 
+
 @app.post('/api/create-recognized-music-sheet/{music_sheet_id}')
 async def create_recognized_music_sheet(music_sheet_id: int):
-    #TODO привязать данный эндпоинт к нейронке и добавлять её ответ в базу данных
-    pass
+    with Session(engine) as db:
+        music_sheet = db.query(MusicSheet).filter(MusicSheet.id == music_sheet_id).first()
+
+    img = Image.open(f"static\\files\\music_sheets\\{music_sheet.music_sheet}")
+
+    image_tr = tr.Compose([
+        tr.Grayscale(num_output_channels=3),
+        tr.Resize((416, 461)),
+        tr.ToTensor(),
+        # tr.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225],),
+    ])
+
+    image_for_model = image_tr(img)
+
+    mp3 = predict('', image_for_model, "note")
+
+    with Session(engine) as db:
+        # insert new file into the database
+        sheet = RecognizedMusicSheet(recognized_music=music_sheet.music_sheet, sheet_id=music_sheet_id)
+        db.add(sheet)
+        db.commit()
+
+    try:
+        # Сохраняем файл на диск
+        file_path = os.path.join('static', 'files', 'audio', mp3.filename)
+        with open(file_path, "wb") as f:
+            f.write(mp3.file.read())
+    except Exception as e:
+        print(f"Error saving file: {e}")
+        raise HTTPException(500, 'Error saving file')
+
 
 @app.post('/api/add-music-sheet/')
 async def add_file(file: UploadFile):
@@ -42,22 +87,22 @@ async def add_file(file: UploadFile):
         db.commit()
     try:
         # Сохраняем файл на диск
-        file_path = os.path.join('web', 'backend', 'static', 'files', 'music_sheets', file.filename)
+        file_path = os.path.join('static', 'files', 'music_sheets', file.filename)
         with open(file_path, "wb") as f:
             f.write(file.file.read())
     except Exception as e:
         print(f"Error saving file: {e}")
         raise HTTPException(500, 'Error saving file')
 
+
 @app.post('/api/add-user/')
-async def add_user(name: str = Body(embed=True, max_length=30),
-                    password: str = Body(embed=True, max_length=40)
-                    ):
+async def add_user(name: str = Body(embed=True, max_length=30), password: str = Body(embed=True, max_length=40)):
     with Session(engine) as db:
         # insert new user into the database
         user = User(name=name, password=password)
         db.add(user)
         db.commit()
+
 
 @app.delete('/api/delete-user/{id}')
 async def delete_user(id: int):
@@ -69,6 +114,7 @@ async def delete_user(id: int):
         else:
             raise HTTPException(404, 'User not found')
 
+
 @app.delete('/api/delete-music-sheet/{id}')
 async def delete_music_sheet(id: int):
     with Session(engine) as db:
@@ -78,6 +124,7 @@ async def delete_music_sheet(id: int):
             db.commit()
         else:
             raise HTTPException(404, 'Music sheet not found')
+
 
 @app.delete('/api/delete-recognized-music-sheet/{id}')
 async def delete_recognized_music_sheet(id: int):
