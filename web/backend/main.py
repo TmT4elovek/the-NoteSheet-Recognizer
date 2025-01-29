@@ -53,7 +53,7 @@ async def create_recognized_music_sheet(music_sheet_id: int):
 
     image_tr = tr.Compose([
         tr.Grayscale(num_output_channels=3),
-        tr.Resize((416, 461)),
+        tr.Resize((416, 416)),
         tr.ToTensor(),
         # tr.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225],),
     ])
