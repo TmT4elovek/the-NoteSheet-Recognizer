@@ -45,54 +45,51 @@ async def get_recognized_music_sheet(music_sheet_id: int):
 
 
 @app.post('/api/create-recognized-music-sheet/{music_sheet_id}')
-async def create_recognized_music_sheet(music_sheet_id: int):
+async def create_recognized_music_sheet(music_sheet_id: list):
+    music_sheets = list()
     with Session(engine) as db:
-        music_sheet = db.query(MusicSheet).filter(MusicSheet.id == music_sheet_id).first()
+        for id in music_sheet_id:
+            music_sheets.append(db.query(MusicSheet).filter(MusicSheet.id == int(id)).first())
 
-    img = Image.open(f"static\\files\\music_sheets\\{music_sheet.music_sheet}")
+    images = list()
 
-    image_tr = tr.Compose([
-        tr.Grayscale(num_output_channels=3),
-        tr.Resize((416, 416)),
-        tr.ToTensor(),
-        # tr.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225],),
-    ])
+    for j in music_sheets:
+        img = Image.open(f"static\\files\\music_sheets\\{j.music_sheet}")
 
-    image_for_model = image_tr(img)
+        image_tr = tr.Compose([
+            tr.Grayscale(num_output_channels=3),
+            tr.Resize((416, 416)),
+            tr.ToTensor(),
+            # tr.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225],),
+        ])
 
-    mp3 = predict('', image_for_model, "note")
+        images.append(image_tr(img))
+
+    mp3 = predict('', images, "note")
 
     with Session(engine) as db:
         # insert new file into the database
-        sheet = RecognizedMusicSheet(recognized_music=music_sheet.music_sheet, sheet_id=music_sheet_id)
-        db.add(sheet)
+        sheet = RecognizedMusicSheet(recognized_music=await mp3.read(), sheet_id=music_sheet_id)
+        for i in music_sheets:
+            i.recognized_music_sheet = sheet
         db.commit()
-
-    try:
-        # Сохраняем файл на диск
-        file_path = os.path.join('static', 'files', 'audio', mp3.filename)
-        with open(file_path, "wb") as f:
-            f.write(mp3.file.read())
-    except Exception as e:
-        print(f"Error saving file: {e}")
-        raise HTTPException(500, 'Error saving file')
 
 
 @app.post('/api/add-music-sheet/')
-async def add_file(file: UploadFile):
-    with Session(engine) as db:
-        # insert new file into the database
-        music = MusicSheet(user_id=0, music_sheet=file.filename, title='MUsic')
-        db.add(music)
-        db.commit()
+async def add_file(file: UploadFile, user_id: int = Body(embed=True)):
     try:
-        # Сохраняем файл на диск
-        file_path = os.path.join('static', 'files', 'music_sheets', file.filename)
-        with open(file_path, "wb") as f:
-            f.write(file.file.read())
+        # Читаем содержимое файла
+        content = await file.read()
+
+        with Session(engine) as db:
+            # Сохраняем файл в базе данных
+            music = MusicSheet(user_id=user_id, music_sheet=content, title=file.filename)
+            user = db.query(User).filter(User.id == user_id).first()
+            user.music_sheets.append(music)
+            db.commit()
     except Exception as e:
-        print(f"Error saving file: {e}")
-        raise HTTPException(500, 'Error saving file')
+        print(f"Error saving file to database: {e}")
+        raise HTTPException(500, 'Error saving file to database')
 
 
 @app.post('/api/add-user/')
