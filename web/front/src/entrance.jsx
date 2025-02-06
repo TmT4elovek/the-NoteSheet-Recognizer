@@ -1,6 +1,6 @@
 import {BrowserRouter, Routes, Route} from 'react-router-dom'
-import LogIn from './login.jsx'
-import Register from './register.jsx'
+import LogIn from './templates/login.jsx'
+import Register from './templates/register.jsx'
 
 
 function Entrance() {
@@ -14,4 +14,4 @@ function Entrance() {
     )
 }
 
-export default Entrance 
+export default Entrance

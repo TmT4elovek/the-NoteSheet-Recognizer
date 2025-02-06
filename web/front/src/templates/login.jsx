@@ -1,9 +1,13 @@
 import '../css/login.css'
+import { Helmet } from 'react-helmet'
 
 function LogIn() {
   return (
     <>
     <div class="wrapper">
+      <Helmet>
+        <title>Login | Ручей</title>
+      </Helmet>
       <form action="#">
         <h2>Login</h2>
         <div class="input-field">
@@ -23,12 +27,11 @@ function LogIn() {
         </div>
         <button type="submit">Log In</button>
         <div class="register">
-          <p>Don't have an account? <a href="#">Sign up</a></p>
+          <p>Don't have an account? <a href="/register">Sign up</a></p>
         </div>
       </form>
     </div>
     </> 
     )
 }
-
 export default LogIn

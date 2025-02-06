@@ -5,15 +5,15 @@
     <title> Music home </title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"/>
-     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   </head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
 <body>
   <header>
     <nav class="navbar">
       <div class="logo"><a href="#">MUSIC></a></div>
       <ul class="menu">
         <li><a href="#">Главная</a></li>
-        <li><a href="index_personal_account.html">Личный кабинет</a></li>
+        <li><a href="/account">Личный кабинет</a></li>
       </ul>
       <div class="buttons">
         <input type="button" value="Войти" onclick="window.location='index_login.html'">
@@ -22,9 +22,7 @@
     </nav>
     <div class="text-content">
       <h2>Загрузите фотографию нотного листа,<br>Вы услышите музыку</h2>
-      <p>Чтобы все заработало, загрузите фотографию нотного листа в формате jpg/png
-        
-      </p>
+      <p>Чтобы все заработало, загрузите фотографию нотного листа в формате jpg, png или gif</p>
     </div>
     <div class="buttons"></div>
       <input id="actual-btn" type="file" onChange="handleImageUpload()" hidden/>
