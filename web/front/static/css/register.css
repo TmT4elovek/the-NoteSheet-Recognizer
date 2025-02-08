@@ -1,3 +1,11 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@200;300;400;500;600;700&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Open Sans", sans-serif;
+}
 
 body {
   display: flex;
@@ -13,8 +21,7 @@ body::before {
   position: absolute;
   width: 100%;
   height: 100%;
-  /* background:#cc189f; */
-  background-image: url('../assets/register-bg.jpg');
+  background: url("../assets/2e21e198-3bec-5739-a13c-5e790ead9a10.jpeg"), #000;
   background-position: center;
   background-size: cover;
 }
@@ -25,8 +32,8 @@ body::before {
   padding: 30px;
   text-align: center;
   border: 1px solid rgba(255, 255, 255, 0.5);
-  backdrop-filter: blur(9px);
-  -webkit-backdrop-filter: blur(9px);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 form {
@@ -74,6 +81,27 @@ h2 {
   transform: translateY(-120%);
 }
 
+.forget {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 25px 0 35px 0;
+  color: #fff;
+}
+
+#remember {
+  accent-color: #fff;
+}
+
+.forget label {
+  display: flex;
+  align-items: center;
+}
+
+.forget label p {
+  margin-left: 8px;
+}
+
 .wrapper a {
   color: #efefef;
   text-decoration: none;
@@ -102,7 +130,7 @@ button:hover {
   background: rgba(255, 255, 255, 0.15);
 }
 
-.login {
+.register {
   text-align: center;
   margin-top: 30px;
   color: #fff;
