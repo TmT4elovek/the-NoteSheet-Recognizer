@@ -4,11 +4,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title }}</title>
-    <link rel="stylesheet" href="/static/css/register.css">
+    <link rel="stylesheet" type='text/css' href="web\front\static\css\register.css">
+    <script src="\js\submit_reg.js"></script>
 </head>
 <body>
     <div class="wrapper">
-        <form action={RegisterUpl}>
+        <form id='reg_form'>
             <h2>Sign up</h2>
             <div class="input-field">
                 <input type="text" required name='username'></input>
@@ -18,7 +19,7 @@
                 <input type="password" required name='password'></input>
                 <label>Enter your password</label>
             </div>
-            <button type="submit">Sign up</button>
+            <button type="submit" on_click=submitReg()>Sign up</button>
             <div class="login">
                 <p>Have an account? <a href="/login">Log in</a></p>
             </div>
