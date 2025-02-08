@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 
 from front.front_route import front
 
@@ -6,7 +7,7 @@ from front.front_route import front
 app = FastAPI()
 
 app.include_router(front)
-
+app.mount("/static", StaticFiles(directory="web/front/static"), name="static")
 
 if __name__ == '__main__':
     import uvicorn

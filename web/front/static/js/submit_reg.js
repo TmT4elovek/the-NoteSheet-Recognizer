@@ -1,10 +1,18 @@
-function submitReg() {
+function submitReg(event) {
+    // Prevent form submission
+    event.preventDefault()
+
     let formElem = document.getElementById('reg_form')
-    let data = new FormData(formElem)
+    let formData = new FormData(formElem)
+    let data = Object.fromEntries(formData.entries());
 
     fetch('/api/add-user', {
         method: 'POST',
-        body: data
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
     })
     .catch(error => console.error(error))
-}
+    console.log('Good req', data);
+} 
