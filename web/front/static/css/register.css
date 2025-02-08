@@ -14,17 +14,31 @@ body {
   min-height: 100vh;
   width: 100%;
   padding: 0 10px;
+  background-image: linear-gradient( 135deg, #fded86  10%, #f57457 100%);
 }
 
-body::before {
-  content: "";
+body::before,
+body::after{
+  content: '';
   position: absolute;
-  width: 100%;
+  left: 0;
+  top: 0;
   height: 100%;
-  background: url("../assets/2e21e198-3bec-5739-a13c-5e790ead9a10.jpeg"), #000;
+  width: 100%;
+}
+body::before{
+  clip-path: circle(30% at left 20%);
+  opacity: 0.4;
+  background: url("https://cdn.culture.ru/images/2e21e198-3bec-5739-a13c-5e790ead9a10"), #000;
   background-position: center;
   background-size: cover;
 }
+body::after{
+  opacity: 0.4;
+  clip-path: circle(25% at right 80%);
+  background: url("https://cdn.culture.ru/images/2e21e198-3bec-5739-a13c-5e790ead9a10"), #000;
+}
+
 
 .wrapper {
   width: 400px;
