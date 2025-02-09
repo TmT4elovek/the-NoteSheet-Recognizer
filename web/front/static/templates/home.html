@@ -13,13 +13,15 @@
         <nav class="navbar">
             <div class="logo"><a href="#">MUSIC></a></div>
             <ul class="menu">
-            <li><a href="#"><b>Главная</b></a></li>
-            <li><a href="/account">Личный кабинет</a></li>
+                <li><a href="#"><b>Главная</b></a></li>
+                <li><a href="/account">Личный кабинет</a></li>
             </ul>
-            <div class="buttons">
-            <input type="button" value="Войти" onclick="window.location.href='/login'">
-            <input type="button" value="Регистрация" onclick="window.location.href='/register'">
-            </div>
+            {% if user == False %}
+                <div class="buttons" id="auth">
+                    <input type="button" value="Войти" onclick="window.location.href='/login'">
+                    <input type="button" value="Регистрация" onclick="window.location.href='/register'">
+                </div>
+            {% endif %}
         </nav>
         <div class="text-content">
             <h2>Загрузите фотографию нотного листа,<br>Вы услышите музыку</h2>

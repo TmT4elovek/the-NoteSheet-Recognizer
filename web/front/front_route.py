@@ -69,7 +69,6 @@ async def check_user(request: Request, response: Response, username: str = Body(
 async def upload_file(request: Request, files: list[UploadFile]):
     res = list()
     for file in files:
-        print(file.filename)
         file_img = await file.read()
         res.append(file.filename)
     return res
