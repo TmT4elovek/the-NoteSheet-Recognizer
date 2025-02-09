@@ -35,6 +35,13 @@ async def get_user(user_id: int):
         user = db.query(User).filter(User.id == user_id).first()
         return user
 
+@back.post('/api/check-user')
+async def check_user(request: Request, username: str = Body(embed=True), password: str = Body(embed=True)):
+    with Session(engine) as db:
+        user = db.query(User).filter(User.username == username).first()
+        if user and user.password == password:
+            return Response(user.to_dict(), status=202)
+        return Response(status_code=404)
 
 @back.get('/api/get-recognized-music-sheet/{music_sheet_id}')
 async def get_recognized_music_sheet(music_sheet_id: int):
@@ -96,13 +103,12 @@ async def add_file(file: UploadFile, user_id: int = Body(embed=True)):
 
 
 @back.post('/api/add-user/')
-async def add_user(name: str = Body(embed=True, max_length=30), password: str = Body(embed=True, max_length=40)):
+async def add_user(request: Request, username: str = Body(embed=True, max_length=30), password: str = Body(embed=True, max_length=40)):
     with Session(engine) as db:
         # insert new user into the database
-        user = User(name=name, password=password)
+        user = User(name=username, password=password)
         db.add(user)
         db.commit()
-
 
 @back.delete('/api/delete-user/{id}')
 async def delete_user(id: int):
