@@ -68,6 +68,7 @@ header .navbar{
   padding: 6px 15px;
   border: none;
   cursor: pointer;
+  margin-right: 20px;
   transition: all 0.3s ease;
   background-image: linear-gradient( 135deg, #fbe659  10%, #fa4017 100%);
 }
