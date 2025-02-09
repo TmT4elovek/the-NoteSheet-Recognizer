@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, LargeBinary, ForeignKey, create_engine, Boolean
+from sqlalchemy import Column, DateTime, Integer, String, LargeBinary, ForeignKey, create_engine, Boolean
 from sqlalchemy.orm import DeclarativeBase, relationship, Session
 
 SQLALCHEMY_DATABASE_URL = 'sqlite:///C:\\Users\\nikit\\PycharmProjects\\pythonProject5\\the-NoteSheet-Recognizer\\web\\backend\\music.db' # ссылка на дб
@@ -46,6 +46,7 @@ class RecognizedMusicSheet(Base):
     id = Column(Integer, primary_key=True)
     recognized_music = Column(LargeBinary, nullable=False)
     sheet_id = Column(Integer, ForeignKey('music_sheet.id'))
+    created_at = Column(DateTime, nullable=False)
     music_sheet = relationship('MusicSheet', back_populates='recognized_music_sheet', uselist=True)
 
     def to_dict(self):
