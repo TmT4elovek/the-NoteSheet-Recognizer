@@ -13,7 +13,8 @@ import torchvision.transforms as tr
 from PIL import Image
 
 
-from static.Entity import MusicSheet, User, RecognizedMusicSheet, SQLALCHEMY_DATABASE_URL
+from backend.static.Entity import MusicSheet, User, RecognizedMusicSheet, SQLALCHEMY_DATABASE_URL
+from backend.static.music21_release import recognize
 
 
 back = APIRouter(prefix='/api', tags=['Backend'])
@@ -54,35 +55,30 @@ async def get_recognized_music_sheet(music_sheet_id: int):
         }
 
 
-# @back.post('/api/create-recognized-music-sheet/{music_sheet_id}')
-# async def create_recognized_music_sheet(music_sheet_id: list):
-#     music_sheets = list()
-#     with Session(engine) as db:
-#         for id in music_sheet_id:
-#             music_sheets.append(db.query(MusicSheet).filter(MusicSheet.id == int(id)).first())
+@back.post('/api/create-recognized-music-sheet/{music_sheet_id}')
+async def create_recognized_music_sheet(music_sheet_id: str):
+    music_sheets = list()
+    with Session(engine) as db:
+        for id in music_sheet_id.split(";"):
+            music_sheets.append(db.query(MusicSheet).filter(MusicSheet.id == int(id)).first())
+    images = list()
+    for j in music_sheets:
+        img = Image.open(f"static\\files\\music_sheets\\{j.music_sheet}")
+        image_tr = tr.Compose([
+            tr.Grayscale(num_output_channels=3),
+            tr.Resize((416, 416)),
+            tr.ToTensor(),
+            # tr.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225],),
+        ])
+        images.append(image_tr(img))
+    mp3 = recognize(predict('', images, "staff"), predict('', images, "note"))
+    with Session(engine) as db:
+        # insert new file into the database
+        for i in music_sheets:
+            sheet = RecognizedMusicSheet(recognized_music=await mp3.read(), sheet_id=music_sheet_id)
+            i.recognized_music_sheet = sheet
+            db.commit()
 
-#     images = list()
-
-#     for j in music_sheets:
-#         img = Image.open(f"static\\files\\music_sheets\\{j.music_sheet}")
-
-#         image_tr = tr.Compose([
-#             tr.Grayscale(num_output_channels=3),
-#             tr.Resize((416, 416)),
-#             tr.ToTensor(),
-#             # tr.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225],),
-#         ])
-
-#         images.append(image_tr(img))
-
-#     mp3 = predict('', images, "note")
-
-#     with Session(engine) as db:
-#         # insert new file into the database
-#         sheet = RecognizedMusicSheet(recognized_music=await mp3.read(), sheet_id=music_sheet_id)
-#         for i in music_sheets:
-#             i.recognized_music_sheet = sheet
-#         db.commit()
 
 
 @back.post('/api/add-music-sheet/')
