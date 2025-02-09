@@ -13,7 +13,7 @@ import torchvision.transforms as tr
 from PIL import Image
 
 
-from backend.static.Entity import MusicSheet, User, RecognizedMusicSheet, SQLALCHEMY_DATABASE_URL
+from static.Entity import MusicSheet, User, RecognizedMusicSheet, SQLALCHEMY_DATABASE_URL
 
 
 back = APIRouter(prefix='/api', tags=['Backend'])
@@ -86,17 +86,25 @@ async def get_recognized_music_sheet(music_sheet_id: int):
 
 
 @back.post('/api/add-music-sheet/')
-async def add_file(file: UploadFile, user_id: int = Body(embed=True)):
+async def add_file(request: Request, files: list[UploadFile]):
+    user_id = request.cookies.get('id')
     try:
         # Читаем содержимое файла
-        content = await file.read()
+        
 
         with Session(engine) as db:
+            # Изменяем статус у старых листов
+            last_sheets = db.query(MusicSheet).filter(MusicSheet.last == True).all()
+            for sheet in last_sheets:
+                sheet.last = False
             # Сохраняем файл в базе данных
-            music = MusicSheet(user_id=user_id, music_sheet=content, title=file.filename)
-            user = db.query(User).filter(User.id == user_id).first()
-            user.music_sheets.append(music)
-            db.commit()
+            for file in files:
+                content = await file.read()
+                music = MusicSheet(user_id=user_id, music_sheet=content, title=file.filename, last=True)
+                user = db.query(User).filter(User.id == user_id).first()
+                user.music_sheets.append(music)
+                db.commit()
+
     except Exception as e:
         print(f"Error saving file to database: {e}")
         raise HTTPException(500, 'Error saving file to database')

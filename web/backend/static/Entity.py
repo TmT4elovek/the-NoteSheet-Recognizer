@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, LargeBinary, ForeignKey, create_engine
+from sqlalchemy import Column, Integer, String, LargeBinary, ForeignKey, create_engine, Boolean
 from sqlalchemy.orm import DeclarativeBase, relationship, Session
 
 SQLALCHEMY_DATABASE_URL = 'sqlite:///C:\\Users\\nikit\\PycharmProjects\\pythonProject5\\the-NoteSheet-Recognizer\\web\\backend\\music.db' # ссылка на дб
@@ -32,6 +32,7 @@ class MusicSheet(Base):
     user_id = Column(Integer, ForeignKey('user.id'))
     music_sheet = Column(LargeBinary, nullable=False)
     title = Column(String(70), nullable=False)
+    last = Column(Boolean, nullable=False)
     user = relationship('User', back_populates='music_sheets', uselist=False)
     recognized_music_sheet = relationship('RecognizedMusicSheet', back_populates='music_sheet', uselist=False, cascade='all, delete')
 
