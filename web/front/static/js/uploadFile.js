@@ -2,9 +2,22 @@ function uploadFile(event) {
     // Prevent form submission
     event.preventDefault()
 
-    let formElem = document.getElementById('upload-form');
-    let formData = new FormData(formElem);
-    let data = Object.fromEntries(formData.entries());
+    var file = document.getElementById('actual-btn');
 
-    alert(data);
+    if(file.files.length)
+    {
+        var reader = new FileReader();
+
+        reader.onload = function(e)
+        {
+            document.getElementById('outputDiv').innerHTML = e.target.result;
+        };
+
+        reader.readAsBinaryString(file.files[0]);
+        
+        fetch('/upload', {
+            method: 'POST',
+            body: reader.result
+        })
+    }
 }

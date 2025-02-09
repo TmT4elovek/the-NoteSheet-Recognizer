@@ -5,6 +5,7 @@
     <title> Music home </title>
     <link rel="stylesheet" href="{{ url_for('static', path='css/main.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"/>
+    <script src="{{ url_for('static', path='js/uploadFile.js') }}"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
 <body>
@@ -26,14 +27,14 @@
         </div>
         {% if is_user == True %}
             <div class="buttons">
-                <form action="/upload/" method="post" enctype="multipart/form-data">
-                    <input id="actual-btn" type="file" name="file" accept="image/*" required hidden>
+                <form action='/api/add-music-sheet/'" method="post" enctype="multipart/form-data">
+                    <input id="actual-btn" type="file" name="files" accept=".jpg,.jpeg,.png,.gif" multiple required hidden>
                     <label for="actual-btn">Выбрать файл</label>
                     <button id="upload-btn" type="submit" class="upload_button">Upload</button>
                 </form>
             </div>
             {% endif %}
-        <div class="play-button">
+        <div class="play-button"
             <span class="play">Запустить музыку</span>
             <i class="fas fa-play" onclick="click()"></i>
         </div>

@@ -1,3 +1,4 @@
+from typing import List
 from fastapi import APIRouter, File, Request, Form, Body, Cookie, UploadFile
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import RedirectResponse, JSONResponse, Response
@@ -59,11 +60,16 @@ async def check_user(request: Request, response: Response, username: str = Body(
 
             response.set_cookie(config.JWT_ACCESS_COOKIE_NAME, access_token)
             response.set_cookie('username', user.username)
+            response.set_cookie('id', user.id)
             return {'access_token': access_token}
         return Response(status_code=404)
 
 
-@front.post("/upload")
-async def upload_file(file: UploadFile = File(...)):
-    file_img = await file.read()
-    return {"filename": file.filename, "content_type": file.content_type}
+@front.post("/api/add-music-sheet")
+async def upload_file(request: Request, files: list[UploadFile]):
+    res = list()
+    for file in files:
+        print(file.filename)
+        file_img = await file.read()
+        res.append(file.filename)
+    return res

@@ -20,7 +20,7 @@ function submitLog(event) {
         } if (response.status == 422) {
             alert('Invalid body')
         }else{
-            // window.location.href = 'http://127.0.0.1:8000/';
+            window.location.href = 'http://127.0.0.1:8000/';
             console.log('Good log', data);
         }
     })
