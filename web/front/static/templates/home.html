@@ -27,7 +27,7 @@
         {% if is_user == True %}
             <div class="buttons">
                 <form action="/upload/" method="post" enctype="multipart/form-data">
-                    <input id="actual-btn" type="file" name="file" required hidden>
+                    <input id="actual-btn" type="file" name="file" accept="image/*" required hidden>
                     <label for="actual-btn">Выбрать файл</label>
                     <button id="upload-btn" type="submit" class="upload_button">Upload</button>
                 </form>
