@@ -24,12 +24,15 @@
             <h2>Загрузите фотографию нотного листа,<br>Вы услышите музыку</h2>
             <p>Чтобы все заработало, загрузите фотографию нотного листа в формате jpg/png/gif</p>
         </div>
-        <div class="buttons">
+        {% if is_user == True %}
+            <div class="buttons">
                 <form action="/upload/" method="post" enctype="multipart/form-data">
-                    <input type="file" name="file" class="buttons" required>
-                    <button type="submit">Upload</button>
+                    <input id="actual-btn" type="file" name="file" required hidden>
+                    <label for="actual-btn">Выбрать файл</label>
+                    <button id="upload-btn" type="submit" class="upload_button">Upload</button>
                 </form>
-        </div>
+            </div>
+            {% endif %}
         <div class="play-button">
             <span class="play">Запустить музыку</span>
             <i class="fas fa-play" onclick="click()"></i>
