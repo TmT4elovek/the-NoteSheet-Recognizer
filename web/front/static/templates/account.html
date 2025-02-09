@@ -12,11 +12,24 @@
         <nav class="navbar">
             <div class="logo"><a href="#">MUSIC></a></div>
             <ul class="menu">
-            <li><a href="/">Главная</a></li>
-            <li><a href="#"><b>Личный кабинет</b></a></li>
+                <li><a href="/">Главная</a></li>
+                <li><a href="#"><b>Личный кабинет</b></a></li>
             </ul>
             <div class="buttons">
-            <input type="button" value="Выйти">
+                <input type="button" onclick="logout()" value="Выйти">
+                <script>
+                function logout() {
+                    function deleteAllCookies() {
+                        document.cookie.split(';').forEach(cookie => {
+                            const eqPos = cookie.indexOf('=');
+                            const name = eqPos > -1 ? cookie.substring(0, eqPos) : cookie;
+                            document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                        });
+                    }
+                    deleteAllCookies();
+                    window.location.href = "/";
+                }
+                </script>
             </div>
         </nav>
         <div class="text-content">
