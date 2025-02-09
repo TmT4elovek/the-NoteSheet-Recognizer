@@ -59,6 +59,18 @@ header .navbar{
   justify-content: space-between;
   align-items: center;
 }
+.upload_button{
+  outline: none;
+  color: #f2f2f2;
+  font-size: 18px;
+  font-weight: 500;
+  border-radius: 12px;
+  padding: 6px 15px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background-image: linear-gradient( 135deg, #fbe659  10%, #fa4017 100%);
+}
 label {
   outline: none;
   color: #f2f2f2;
