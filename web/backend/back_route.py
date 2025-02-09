@@ -14,7 +14,7 @@ from PIL import Image
 
 
 from backend.static.Entity import MusicSheet, User, RecognizedMusicSheet, SQLALCHEMY_DATABASE_URL
-from backend.static.music21_release import recognize
+from music21_release import recognize
 
 
 back = APIRouter(prefix='/api', tags=['Backend'])
