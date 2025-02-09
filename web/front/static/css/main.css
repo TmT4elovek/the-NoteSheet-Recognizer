@@ -79,7 +79,10 @@ label {
   border-radius: 12px;
   padding: 6px 15px;
   border: none;
-  margin: 200px;
+  margin-top: 200px;
+  margin-bottom: 200px;
+  margin-left: 80px;
+  margin-right: 20px;
   cursor: pointer;
   transition: all 0.3s ease;
   background-image: linear-gradient( 135deg, #fbe659  10%, #fa4017 100%);
