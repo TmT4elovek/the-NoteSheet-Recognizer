@@ -1,17 +1,19 @@
 from music21 import *
-import torch
+from PIL import Image
+
 import matplotlib.pyplot as plt
 
-from neural_network_utils.utils import *
+import backend.neural_network_utils.utils as utils 
+import backend.neural_network_utils.parametrs as parametrs
 
 V3_LIST_TRANSLATOR26 = dict()
-for k in (V3_LIST26.keys()):
-  item = V3_LIST26[k]
+for k in (parametrs.V3_LIST26.keys()):
+  item = parametrs.V3_LIST26[k]
   V3_LIST_TRANSLATOR26[item] = k
 
 V3_LIST_TRANSLATOR52 = dict()
-for k in (V3_LIST52.keys()):
-  item = V3_LIST52[k]
+for k in (parametrs.V3_LIST52.keys()):
+  item = parametrs.V3_LIST52[k]
   V3_LIST_TRANSLATOR52[item] = k
 
 V3_LIST_KEYS26 = V3_LIST_TRANSLATOR26.keys()
@@ -97,11 +99,11 @@ def find_note_oct(note_coord: tuple, lines: list, key: str) -> str:
     inters = intersection_int(note_coord, line)
     # print('intersection:', inters)
     if inters >= note_area * 0.9:
-      return line_tone[id][key[-1]]
+      return line_tone[id][key[-1].upper()]
     elif inters >= note_area * 0.3:
-      return line_tone[id+0.5][key[-1]]
+      return line_tone[id+0.5][key[-1].upper()]
     id += 1
-  return line_tone[-0.5][key[-1]]
+  return line_tone[-0.5][key[-1].upper()]
 
 def expand_note_box(coord: tuple, dx: int, dy: int) -> tuple:
   x1, y1, x2, y2 = coord
@@ -161,16 +163,16 @@ def recognize(imgs, yolov3_m, yolov3_l):
   g_part = stream.Part([clef.GClef()])
   f_part = stream.Part([clef.FClef()])
 
+  all_notes_in_staffs, st, _ = utils.process_img(imgs, yolov3_m, yolov3_l)
+  print(st.shape)
+
   #По всем листам
-  # for id in range(len(staff_data)): # оставить в итоговом варианте
-  for id in [0, 100]:  # для тестов
-
-    in_list = translate_output(st[1].unsqueeze(0), nt[0].unsqueeze(0), 26, len(V3_LIST26))[0]['y']
-    in_list_labels = list(zip([V3_LIST26[i.item()] for i in in_list["labels"]], in_list['boxes'].tolist()))
-
-    notes_in_staffs = process_img(imgs, yolov3_m, yolov3_l)
+  for id in range(0, len(imgs)):
     # print('-'*15)
-    
+    notes_in_staffs = all_notes_in_staffs[id]
+    print(st[id].shape)
+    in_list = utils.translate_output(st[id].unsqueeze(0), imgs, 26, len(parametrs.V3_LIST26))[0]['y']
+    in_list_labels = list(zip([parametrs.V3_LIST26[i.item()] for i in in_list["labels"]], in_list['boxes'].tolist()))
     # Удаление из списка brace
     list_labels_sort = list(filter(lambda i: i[0] != 'brace', in_list_labels))
 
@@ -377,7 +379,7 @@ def recognize(imgs, yolov3_m, yolov3_l):
   # print(recognized_music_sheets)
   s = stream.Score()
   s.append(parts)
-  s.show()
+  # s.show()
   s.show('text')
   s.show('midi')
   s.write() #! TODO: придумать как соединить этот файл и main

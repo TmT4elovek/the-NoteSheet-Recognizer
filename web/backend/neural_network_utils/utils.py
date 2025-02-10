@@ -4,8 +4,8 @@ import torch
 from torch import nn
 import torchvision.transforms as tr
 
-from nns_module import YOLOv3
-from parametrs import *  # parametrs
+from backend.neural_network_utils.nns_module import YOLOv3
+from backend.neural_network_utils.parametrs import *  # parametrs
 
 
 
@@ -145,9 +145,9 @@ def find_staff_lines(obj_list, pred_note_tensor: torch.Tensor, pred_staff_tensor
   ALLOWED_ERROR = 2
   readed_notes = dict()
   # "Delta" is how much we expand the boxes due to the error
-
-  note_dict = translate_output(pred_note_tensor[1].unsqueeze(0), pred_note_tensor[0].unsqueeze(0), 52, len(V3_LIST52))
-  staff_dict = translate_output(pred_staff_tensor[1].unsqueeze(0), pred_staff_tensor[0].unsqueeze(0), 26, len(V3_LIST26))
+  pass_list = torch.Tensor([1 for _ in range(pred_note_tensor.shape[0])])
+  note_dict = translate_output(pred_note_tensor, pass_list, 52, len(V3_LIST52))
+  staff_dict = translate_output(pred_staff_tensor, pass_list, 26, len(V3_LIST26))
 
   # staff_tensor = staff_dict[0]["y"]["boxes"]
   note_tensor = note_dict[0]["y"]["boxes"]
@@ -223,6 +223,10 @@ def process_img(imgs, yolov3_m, yolov3_l):
   pred_staffs, _ = yolov3_m(imgs_input)
   _, pred_symbols = yolov3_l(imgs_input)
   symbols_translations = translate_output(pred_symbols, imgs_input, 52, len(V3_LIST52))
-  notes_on_staff = find_staff_lines(symbols_translations, pred_symbols, pred_staffs)
+  notes_on_staff_list = list()
+  for idx in range(len(imgs_input)):
+    # print(pred_symbols[idx].unsqueeze(0).shape)
+    notes_on_staff = find_staff_lines([symbols_translations[idx]], pred_symbols[idx].unsqueeze(0), pred_staffs[idx].unsqueeze(0))
+    notes_on_staff_list.append(notes_on_staff)
 
-  return notes_on_staff
+  return notes_on_staff_list, pred_staffs, pred_symbols

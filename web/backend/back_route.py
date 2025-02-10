@@ -15,7 +15,7 @@ from PIL import Image
 
 from backend.static.Entity import MusicSheet, User, RecognizedMusicSheet, SQLALCHEMY_DATABASE_URL
 from music21_release import recognize
-import neural_network_utils.utils as utils
+from neural_network_utils import utils
 
 
 back = APIRouter(prefix='/api', tags=['Backend'])
@@ -40,7 +40,7 @@ async def check_user(request: Request, username: str = Body(embed=True), passwor
 
 @back.get('/api/get-recognized-music-sheet/{music_sheet_id}')
 async def get_recognized_music_sheet(music_sheet_id: int):
-    with (Session(engine) as db):
+    with Session(engine) as db:
         music_sheet = db.query(MusicSheet).filter(MusicSheet.id == music_sheet_id).first()
         recognized_music_sheet = db.query(RecognizedMusicSheet).filter(RecognizedMusicSheet.sheet_id == music_sheet_id).first()
         return {
