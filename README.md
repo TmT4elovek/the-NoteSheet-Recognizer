@@ -4,7 +4,9 @@
 <hr>
 To start the server:
 
-[![Typing SVG](https://readme-typing-svg.herokuapp.com?color=%2336BCF7&lines=>+python+main.py)](https://git.io/typing-svg)
+```
+python main.py
+```
 
 The weights of the model have already been uploaded to the <i> web/backend/neurak_network_utils/wghd </i> folder, but if you have a problem installing them, you can download them from Google Drive. To install use this:
 
@@ -27,6 +29,7 @@ The Notes is a web application that uses a neural network to automatically recog
   - sqlalchemy;
 - [ ] Web:
   - fastapi;
+  - gdown; (for weights)
 - [ ] Note recognition:
   - PIL (pillow);
   - music21.
