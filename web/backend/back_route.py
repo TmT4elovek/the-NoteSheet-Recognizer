@@ -15,20 +15,14 @@ from PIL import Image
 
 from backend.static.Entity import MusicSheet, User, RecognizedMusicSheet, SQLALCHEMY_DATABASE_URL
 from music21_release import recognize
+import neural_network_utils.utils as utils
 
 
 back = APIRouter(prefix='/api', tags=['Backend'])
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
+yolov3_m, yolov3_l = utils.import_models()
 
-
-def predict(model, image, mode):
-    if mode == "staff":
-        prediction, _ = model(image.unsqueeze(0))
-        return prediction
-    if mode == "note":
-        _, prediction = model(image.unsqueeze(0))
-        return prediction
 
 @back.get('/api/get-user/{user_id}')
 async def get_user(user_id: int):
@@ -64,14 +58,8 @@ async def create_recognized_music_sheet(music_sheet_id: str):
     images = list()
     for j in music_sheets:
         img = Image.open(f"static\\files\\music_sheets\\{j.music_sheet}")
-        image_tr = tr.Compose([
-            tr.Grayscale(num_output_channels=3),
-            tr.Resize((416, 416)),
-            tr.ToTensor(),
-            # tr.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225],),
-        ])
-        images.append(image_tr(img))
-    mp3 = recognize(predict('', images, "staff"), predict('', images, "note"))
+        images.append(img)
+    mp3 = recognize(images)
     with Session(engine) as db:
         # insert new file into the database
         for i in music_sheets:
