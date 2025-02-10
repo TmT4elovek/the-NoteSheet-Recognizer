@@ -36,9 +36,11 @@
                 <form action="/api/add-music-sheet/" method="post" enctype="multipart/form-data">
                     <input id="actual-btn" type="file" name="files" accept=".jpg,.jpeg,.png,.gif" multiple required hidden>
                     <label for="actual-btn">Выбрать файл</label>
-                    <input id="name-file" type="text" placeholder="Имя аудио файла" name="name-file" required/>
                     <button id="upload-btn" type="submit" class="upload_button">Upload</button>
-                    <button id="transformation-btn" type="submit" class="upload_button">Transformation</button>
+                </form>
+                <form action="/api/add-music-sheet/" method="post" enctype="multipart/form-data">
+                    <input id="name-file" type="text" placeholder="Имя аудио файла" name="name-file" class="text-input" required/>
+                    <button id="transformation-btn" type="submit" class="upload_button">Преобразовать</button>
                 </form>
             </div>
             {% endif %}
