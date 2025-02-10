@@ -32,12 +32,12 @@
                 <h2>Загрузите фотографию нотного листа,<br>Вы услышите музыку</h2>
                 <p>Чтобы все заработало, загрузите фотографию нотного листа в формате jpg/png/gif</p>
             </div>
-            {% if name %}
+            {% if audio %}
                 <div class="text-content">
                     <h2>Скачать музыку:</h2>
-                    <p><a href="" download>{{% name %}}</a></p>
+                    <p><a href="/api/get-recognized-music-sheet/" download>{{% audio %}}</a></p>
                 </div>
-                {% endif %}
+            {% endif %}
         </div>
         {% if is_user == True %}
             <div class="buttons">
