@@ -382,5 +382,6 @@ def recognize(imgs, yolov3_m, yolov3_l):
   s.show('text')
   s.show('midi')
   s.write() #! TODO: придумать как соединить этот файл и main
+  return s
 
 #recognize(dataset, dataset352)
