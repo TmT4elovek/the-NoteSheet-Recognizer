@@ -1,7 +1,4 @@
 from music21 import *
-from PIL import Image
-
-import matplotlib.pyplot as plt
 
 import backend.neural_network_utils.utils as utils 
 import backend.neural_network_utils.parametrs as parametrs
