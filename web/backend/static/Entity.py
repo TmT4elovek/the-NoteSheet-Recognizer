@@ -1,7 +1,9 @@
 from sqlalchemy import Column, DateTime, Integer, String, LargeBinary, ForeignKey, create_engine, Boolean
 from sqlalchemy.orm import DeclarativeBase, relationship, Session
 
-SQLALCHEMY_DATABASE_URL = 'sqlite:///C:\\Users\\nikit\\PycharmProjects\\pythonProject5\\the-NoteSheet-Recognizer\\web\\backend\\music.db' # ссылка на дб
+from datetime import datetime
+
+SQLALCHEMY_DATABASE_URL = 'sqlite:///web\\backend\\music.db' # ссылка на дб
 
 
 # создание процесса
@@ -20,6 +22,7 @@ class User(Base):
     name = Column(String(30), unique=True, nullable=False)
     password = Column(String(40), nullable=False)
     music_sheets = relationship('MusicSheet', back_populates='user', uselist=True, cascade='all, delete')
+    rec_music_sheets = relationship('RecognizedMusicSheet', back_populates='user', uselist=True, cascade='all, delete')
 
     def to_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
@@ -44,10 +47,11 @@ class RecognizedMusicSheet(Base):
     __tablename__ = 'recognized_music_sheet'
 
     id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('user.id'))
     recognized_music = Column(LargeBinary, nullable=False)
-    sheet_id = Column(Integer, ForeignKey('music_sheet.id'))
-    created_at = Column(DateTime, nullable=False)
+    created_at = Column(DateTime, default=datetime.now(), nullable=False)
     music_sheet = relationship('MusicSheet', back_populates='recognized_music_sheet', uselist=True)
+    user = relationship('User', back_populates='recognized_music_sheet', uselist=False)
 
     def to_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}

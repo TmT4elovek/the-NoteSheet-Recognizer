@@ -14,9 +14,9 @@ from PIL import Image
 
 
 from backend.static.Entity import MusicSheet, User, RecognizedMusicSheet, SQLALCHEMY_DATABASE_URL
-from backend.music21_release import recognize
-from backend.neural_network_utils import utils
-from backend.neural_network_utils import parametrs
+from music21_release import recognize
+from neural_network_utils import utils
+from neural_network_utils import parametrs
 
 
 back = APIRouter(prefix='/api', tags=['Backend'])
@@ -59,12 +59,12 @@ async def create_recognized_music_sheet(music_sheet_id: str):
     images = list()
     for j in music_sheets:
         file_name = j.music_sheet
-        if any(file_name.endswith(file_type) for file_type in parametrs.FORMATS):
+        if any(file_name.endswith(file_type) for file_type  in parametrs.FORMATS):
             img = Image.open(f"static\\files\\music_sheets\\{j.music_sheet}")
             images.append(img)
     if len(images) == 0:
         # TODO: Оповещение
-        return 1
+        return
     mp3 = recognize(images)
     with Session(engine) as db:
         # insert new file into the database
@@ -72,7 +72,6 @@ async def create_recognized_music_sheet(music_sheet_id: str):
             sheet = RecognizedMusicSheet(recognized_music=await mp3.read(), sheet_id=music_sheet_id)
             i.recognized_music_sheet = sheet
             db.commit()
-    return 0
 
 
 
