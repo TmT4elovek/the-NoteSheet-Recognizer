@@ -50,11 +50,11 @@ async def check_user(request: Request, response: Response, username: str = Body(
             response.set_cookie('username', user.username)
             response.set_cookie('id', user.id)
             # return {'access_token': access_token}
-            return response
-        raise HTTPException(status_code=404, detail="Database error")
+            # return response
+        # raise HTTPException(status_code=404, detail="Database error")
 
 @back.get('/api/get-recognized-music-sheet/')
-async def get_recognized_music_sheet(request: Request, filename=Form(...)):
+async def get_recognized_music_sheet(request: Request):
 
     with (Session(engine) as db):
         recognized_music_sheet = db.query(RecognizedMusicSheet).filter(RecognizedMusicSheet.id == request.cookies.get("rec_sheet_id")).first()
@@ -109,7 +109,7 @@ async def create_recognized_music_sheet(request: Request, response: Response):
         db.commit()
     
     response = templates.TemplateResponse("home.html", {"request": request, "user": True, "audio": mp3.filename})
-    response.set_cookie('rec_sheet_id', sheet.id)
+    response.set_cookie('rec_sheet_id', sheet_id)
     return response
 
 
@@ -117,6 +117,7 @@ async def create_recognized_music_sheet(request: Request, response: Response):
 @back.post('/api/add-music-sheet/')
 async def add_file(request: Request, response: Response, files: list[UploadFile]):
     user_id = request.cookies.get('id')
+    print(user_id)
     try:
         sheets_ids = list()
         with Session(engine) as db:
@@ -126,10 +127,11 @@ async def add_file(request: Request, response: Response, files: list[UploadFile]
                 sheet.last = False
             # Сохраняем файл в базе данных
             for file in files:
+                print(file.filename)
                 content = await file.read()
                 music = MusicSheet(user_id=user_id, music_sheet=content, title=file.filename, last=True)
                 user = db.query(User).filter(User.id == user_id).first()
-                user.music_sheets.append(music)
+                user.music_sheet.append(music)
                 sheets_ids.append(str(music.id))
                 db.add(music)
             db.commit()
@@ -147,7 +149,6 @@ async def add_user(request: Request, username: str = Body(embed=True, max_length
         user = User(name=username, password=password)
         db.add(user)
         db.commit()
-    return {'message': 'User added successfully'}
 
 @back.delete('/api/delete-user/{id}')
 async def delete_user(id: int):
