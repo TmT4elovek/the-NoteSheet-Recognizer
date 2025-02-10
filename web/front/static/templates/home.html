@@ -27,9 +27,17 @@
                 </div>
             {% endif %}
         </nav>
-        <div class="text-content">
-            <h2>Загрузите фотографию нотного листа,<br>Вы услышите музыку</h2>
-            <p>Чтобы все заработало, загрузите фотографию нотного листа в формате jpg/png/gif</p>
+        <div class="container">
+            <div class="text-content">
+                <h2>Загрузите фотографию нотного листа,<br>Вы услышите музыку</h2>
+                <p>Чтобы все заработало, загрузите фотографию нотного листа в формате jpg/png/gif</p>
+            </div>
+            {% if name %}
+                <div class="text-content">
+                    <h2>Скачать музыку:</h2>
+                    <p><a href="" download>{{% name %}}</a></p>
+                </div>
+                {% endif %}
         </div>
         {% if is_user == True %}
             <div class="buttons">
