@@ -20,7 +20,7 @@ from backend.neural_network_utils import parametrs
 from backend.neural_network_utils import utils
 from backend.music21_release import recognize
 #! НА РЕЛИЗЕ
-from ...web.front.front_route import authx, config, templates
+from backend.front.front_route import authx, config, templates
 
 
 back = APIRouter(tags=['Backend'])

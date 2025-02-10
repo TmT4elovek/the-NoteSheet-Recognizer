@@ -2,12 +2,12 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 
 from backend.back_route import back
-from front.front_route import front
+from backend.front.front_route import front
 
 app = FastAPI()
 app.include_router(back)
 app.include_router(front)
-app.mount("/static", StaticFiles(directory="web/front/static"), name="static")
+app.mount("/static", StaticFiles(directory="web/backend/front/static"), name="static")
 
 if __name__ == '__main__':
     import uvicorn
