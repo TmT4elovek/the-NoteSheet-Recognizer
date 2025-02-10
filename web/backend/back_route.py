@@ -56,7 +56,7 @@ async def check_user(request: Request, response: Response, username: str = Body(
 @back.get('/api/get-recognized-music-sheet/')
 async def get_recognized_music_sheet(request: Request):
 
-    with (Session(engine) as db):
+    with Session(engine) as db:
         recognized_music_sheet = db.query(RecognizedMusicSheet).filter(RecognizedMusicSheet.id == request.cookies.get("rec_sheet_id")).first()
     byte_stream = BytesIO(recognized_music_sheet.recognized_music)
     headers = {
