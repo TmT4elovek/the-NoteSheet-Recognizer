@@ -36,4 +36,4 @@ The Notes is a web application that uses a neural network to automatically recog
   - music21.
 
 ## Video presentation
-...
+RuTube: https://rutube.ru/video/private/991583deadfa66c7ab249f1a82a5710b/?p=LkglghyK3rZrfVGRUQfkxg
