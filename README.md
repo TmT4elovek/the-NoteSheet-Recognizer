@@ -33,3 +33,6 @@ The Notes is a web application that uses a neural network to automatically recog
 - [ ] Note recognition:
   - PIL (pillow);
   - music21.
+
+## Video presentation
+...
