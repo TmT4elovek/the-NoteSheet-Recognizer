@@ -11,7 +11,7 @@ python main.py
 The weights of the model have already been uploaded to the <i> web/backend/neurak_network_utils/wghd </i> folder, but if you have a problem installing them, you can download them from Google Drive. To install use this:
 
 ```
- gdown --folder https://drive.google.com/drive/folders/1C30EmNiFWdherD9xYbR6d89r27-sit6E --remaining-ok
+gdown --folder https://drive.google.com/drive/folders/1C30EmNiFWdherD9xYbR6d89r27-sit6E --remaining-ok
 ``` 
 
 :white_check_mark: the code has passed all flake8 checks
