@@ -161,7 +161,9 @@ def recognize(imgs, yolov3_m, yolov3_l):
   f_part = stream.Part([clef.FClef()])
 
   all_notes_in_staffs, st, _ = utils.process_img(imgs, yolov3_m, yolov3_l)
-  print(st.shape)
+  if st.numel() == 0 or len(all_notes_in_staffs) == 0:
+    # TODO: Нету предсказанных тензоров
+    return
 
   #По всем листам
   for id in range(0, len(imgs)):

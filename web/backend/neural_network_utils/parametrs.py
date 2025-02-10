@@ -38,3 +38,4 @@ V3_LIST52 = {
 
 IMAGE_SIZE = (416, 416)
 STOP_FIND_LIST = ["ledgerLine", "stem"]
+FORMATS = [".png", ".jpg", ".jpeg", ".gif", ".bmp"]
