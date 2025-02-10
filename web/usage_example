@@ -14,7 +14,7 @@ engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread
 images = list()
 music_sheets = ["1.png", "2.png"]
 for j in music_sheets:
-    path = os.path.join(r"static\files\music_sheets", j)
+    path = os.path.join(r"PATH", j)
     img = Image.open(path)
     images.append(img)
 mp3 = recognize(images, yolov3_m, yolov3_l)
