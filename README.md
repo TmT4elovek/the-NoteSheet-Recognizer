@@ -9,8 +9,13 @@ To start the server:
 The weights of the model have already been uploaded to the <i> web/backend/neurak_network_utils/wghd </i> folder, but if you have a problem installing them, you can download them from Google Drive.
 
 :white_check_mark: the code has passed all flake8 checks
+
+## Short description
+
+The Notes is a web application that uses a neural network to automatically recognize sheet music and play it back in MP3 format. The project aims to simplify the process of converting traditional sheet music into digital format, which can be useful for musicians, music teachers, software developers and people with visual problems. Key components include a neural network for recognizing musical symbols, a module for converting notes to MP3, and a user-friendly graphical interface.
+
 ## Dependencies
-  - **os;**
+- [ ]  **os;**
 - [ ] Neural Network:
   - torch;
   - torchvision;
