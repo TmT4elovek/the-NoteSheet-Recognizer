@@ -19,10 +19,10 @@ class User(Base):
     __tablename__ = 'user'
 
     id = Column(Integer, primary_key=True)
-    name = Column(String(30), unique=True, nullable=False)
+    username = Column(String(30), unique=True, nullable=False)
     password = Column(String(40), nullable=False)
-    music_sheets = relationship('MusicSheet', back_populates='user', uselist=True, cascade='all, delete')
-    rec_music_sheets = relationship('RecognizedMusicSheet', back_populates='user', uselist=True, cascade='all, delete')
+    music_sheet = relationship('MusicSheet', back_populates='user', uselist=True, cascade='all, delete')
+    recognized_music_sheet = relationship('RecognizedMusicSheet', back_populates='user', uselist=True, cascade='all, delete')
 
     def to_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
@@ -34,9 +34,10 @@ class MusicSheet(Base):
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('user.id'))
     music_sheet = Column(LargeBinary, nullable=False)
+    rec_sheet_id = Column(Integer, ForeignKey('recognized_music_sheet.id'))
     title = Column(String(70), nullable=False)
     last = Column(Boolean, nullable=False)
-    user = relationship('User', back_populates='music_sheets', uselist=False)
+    user = relationship('User', back_populates='music_sheet', uselist=False)
     recognized_music_sheet = relationship('RecognizedMusicSheet', back_populates='music_sheet', uselist=False, cascade='all, delete')
 
     def to_dict(self):
@@ -57,4 +58,4 @@ class RecognizedMusicSheet(Base):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 # создание всех таблиц
-#Base.metadata.create_all(engine)
+# Base.metadata.create_all(engine)

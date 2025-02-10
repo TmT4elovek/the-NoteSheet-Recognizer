@@ -11,9 +11,12 @@ function submitReg(event) {
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(data)
+        body: data
+    })
+    .then(response => {
+        console.log('Good req', data);
+        window.location.href = 'http://127.0.0.1:8000/login';
     })
     .catch(error => console.error(error))
-    console.log('Good req', data);
-    window.location.href = 'http://127.0.0.1:8000/login';
+    
 } 

@@ -8,6 +8,7 @@ from fastapi.templating import Jinja2Templates
 
 from sqlalchemy import create_engine, desc
 from sqlalchemy.orm import Session
+from sqlalchemy.exc import OperationalError
 
 import torchvision.transforms as tr
 from PIL import Image
@@ -38,15 +39,19 @@ async def get_user(user_id: int):
 @back.post('/api/check-user')
 async def check_user(request: Request, response: Response, username: str = Body(embed=True), password: str = Body(embed=True)):
     with Session(engine) as db:
-        user = db.query(User).filter(User.username == username).first()
+        try:
+            user = db.query(User).filter(User.username == username).first()
+        except OperationalError:
+            raise HTTPException(status_code=404, detail="Database error")
         if user and user.password == password:
             access_token = authx.create_access_token(uid=str(user.id))
-
+            print("Access Log In")
             response.set_cookie(config.JWT_ACCESS_COOKIE_NAME, access_token)
             response.set_cookie('username', user.username)
             response.set_cookie('id', user.id)
             # return {'access_token': access_token}
-        return Response(status_code=404)
+            return response
+        raise HTTPException(status_code=404, detail="Database error")
 
 @back.get('/api/get-recognized-music-sheet/')
 async def get_recognized_music_sheet(request: Request, filename=Form(...)):
@@ -142,6 +147,7 @@ async def add_user(request: Request, username: str = Body(embed=True, max_length
         user = User(name=username, password=password)
         db.add(user)
         db.commit()
+    return {'message': 'User added successfully'}
 
 @back.delete('/api/delete-user/{id}')
 async def delete_user(id: int):

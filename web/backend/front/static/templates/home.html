@@ -16,7 +16,7 @@
                 <li><a href="#"><b>Главная</b></a></li>
                 <li><a href="/account">Личный кабинет</a></li>
             </ul>
-            {% if user == False %}
+            {% if is_user == False %}
                 <div class="buttons" id="auth">
                     <input type="button" value="Войти" onclick="window.location.href='/login'">
                     <input type="button" value="Регистрация" onclick="window.location.href='/register'">
@@ -35,7 +35,7 @@
             {% if audio %}
                 <div class="text-content">
                     <h2>Скачать музыку:</h2>
-                    <p><a href="/api/get-recognized-music-sheet/" download>{{% audio %}}</a></p>
+                    <p><a href="/api/get-recognized-music-sheet/" download>{{ audio }}</a></p>
                 </div>
             {% endif %}
         </div>

@@ -17,13 +17,14 @@ function submitLog(event) {
     .then(response => {
         if(response.status == 404) {
             alert('User not found');
+            return;
         } if (response.status == 422) {
             alert('Invalid body')
+            return;
         }else{
             window.location.href = 'http://127.0.0.1:8000/';
             console.log('Good log', data);
         }
     })
     .catch(error => console.error(error));
-    
 } 

@@ -44,31 +44,31 @@ async def account(request: Request, username = Cookie(...)):
     return templates.TemplateResponse(request, 'account.html', {'request': request, 'user': username})
 
 
-#!BACK
-@front.post('/api/check-user')
-async def check_user(request: Request, response: Response, username: str = Body(embed=True, min_length=5), password: str = Body(embed=True, min_length=8)):
-        class User:
-            def __init__(self, username, password):
-                self.username = username
-                self.password = password
-                self.id = 0
+# #!BACK
+# @front.post('/api/check-user')
+# async def check_user(request: Request, response: Response, username: str = Body(embed=True, min_length=5), password: str = Body(embed=True, min_length=8)):
+#         class User:
+#             def __init__(self, username, password):
+#                 self.username = username
+#                 self.password = password
+#                 self.id = 0
 
-        user = User(username, password)        
+#         user = User(username, password)        
 
-        if user and user.password == password:
-            access_token = authx.create_access_token(uid=str(user.id))
+#         if user and user.password == password:
+#             access_token = authx.create_access_token(uid=str(user.id))
 
-            response.set_cookie(config.JWT_ACCESS_COOKIE_NAME, access_token)
-            response.set_cookie('username', user.username)
-            response.set_cookie('id', user.id)
-            return {'access_token': access_token}
-        return Response(status_code=404)
+#             response.set_cookie(config.JWT_ACCESS_COOKIE_NAME, access_token)
+#             response.set_cookie('username', user.username)
+#             response.set_cookie('id', user.id)
+#             return {'access_token': access_token}
+#         return Response(status_code=404)
 
 
-@front.post("/api/add-music-sheet")
-async def upload_file(request: Request, files: list[UploadFile]):
-    res = list()
-    for file in files:
-        file_img = await file.read()
-        res.append(file.filename)
-    return res
+# @front.post("/api/add-music-sheet")
+# async def upload_file(request: Request, files: list[UploadFile]):
+#     res = list()
+#     for file in files:
+#         file_img = await file.read()
+#         res.append(file.filename)
+#     return res
