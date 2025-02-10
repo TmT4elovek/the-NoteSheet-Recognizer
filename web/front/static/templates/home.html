@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ru" dir="ltr">
+    <head>
+    <meta charset="UTF-8">
+    <title> Music home </title>
+    <link rel="stylesheet" href="{{ url_for('static', path='css/main.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"/>
+    <script src="{{ url_for('static', path='js/uploadFile.js') }}"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo"><a href="#">MUSIC></a></div>
+            <ul class="menu">
+                <li><a href="#"><b>Главная</b></a></li>
+                <li><a href="/account">Личный кабинет</a></li>
+            </ul>
+            {% if user == False %}
+                <div class="buttons" id="auth">
+                    <input type="button" value="Войти" onclick="window.location.href='/login'">
+                    <input type="button" value="Регистрация" onclick="window.location.href='/register'">
+                </div>
+            {% else %}
+                <div>
+                    <a href="#"></a>
+                </div>
+            {% endif %}
+        </nav>
+        <div class="text-content">
+            <h2>Загрузите фотографию нотного листа,<br>Вы услышите музыку</h2>
+            <p>Чтобы все заработало, загрузите фотографию нотного листа в формате jpg/png/gif</p>
+        </div>
+        {% if is_user == True %}
+            <div class="buttons">
+                <form action="/api/add-music-sheet/" method="post" enctype="multipart/form-data">
+                    <input id="actual-btn" type="file" name="files" accept=".jpg,.jpeg,.png,.gif" multiple required hidden>
+                    <label for="actual-btn">Выбрать файл</label>
+                    <input id="name-file" type="text" placeholder="Имя аудио файла" name="name-file" required/>
+                    <button id="upload-btn" type="submit" class="upload_button">Upload</button>
+                    <button id="transformation-btn" type="submit" class="upload_button">Transformation</button>
+                </form>
+            </div>
+            {% endif %}
+        <div class="play-button">
+            <span class="play">Запустить музыку</span>
+            <i class="fas fa-play" onclick="click()"></i>
+        </div>
+    </header>
+</body>
+</html>
