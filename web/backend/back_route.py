@@ -16,14 +16,14 @@ from io import BytesIO
 
 
 from backend.static.Entity import MusicSheet, User, RecognizedMusicSheet, SQLALCHEMY_DATABASE_URL
-from music21_release import recognize
-from neural_network_utils import parametrs
-from neural_network_utils import utils
+from backend.neural_network_utils import parametrs
+from backend.neural_network_utils import utils
+from backend.music21_release import recognize
 #! НА РЕЛИЗЕ
-# from ..front.front_route import authx, config, templates
+from ...web.front.front_route import authx, config, templates
 
 
-back = APIRouter(prefix='/api', tags=['Backend'])
+back = APIRouter(tags=['Backend'])
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
 yolov3_m, yolov3_l = utils.import_models()

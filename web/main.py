@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
-from backend.back_route import back
 
+from backend.back_route import back
 from front.front_route import front
 
 app = FastAPI()
