@@ -54,7 +54,8 @@
             {% endif %}
         <div class="play-button">
             <span class="play">Запустить музыку</span>
-            <i class="fas fa-play" onclick="click()"></i>
+            <audio id="sound" class="play"><source src="water_ocean_waves_shore_calm_002.mp3" type="audio/mp3"></audio>
+            <i class="fas fa-play" onclick="sound.play()"></i>
         </div>
     </header>
 </body>
