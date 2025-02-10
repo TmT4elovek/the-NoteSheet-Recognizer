@@ -1,4 +1,4 @@
-PATH_TO_WEIGHTS = r"D:\МошПредпроф2025\Git\the-NoteSheet-Recognizer\web\backend\neural_network_utils\wght"
+PATH_TO_WEIGHTS = r"wght"
 EXISTENCE_THRESHOLD = 0.4
 V3_LIST26 = {1: "staff", 2: "clefCAlto", 3: "clefCTenor", 4: "clefG", 5: "clefF"}
 V3_LIST52 = {
