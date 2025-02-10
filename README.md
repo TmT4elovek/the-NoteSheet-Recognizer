@@ -29,7 +29,8 @@ The Notes is a web application that uses a neural network to automatically recog
   - sqlalchemy;
 - [ ] Web:
   - fastapi;
-  - gdown; (for weights)
+  - gdown (for weights);
+  - authx (for token);
 - [ ] Note recognition:
   - PIL (pillow);
   - music21.
