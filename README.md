@@ -1,6 +1,6 @@
 <h1 align="center">The Notes <a href="https://yandex.ru/images/search?family=yes&text=tim+vfylfhby&pos=1&rpt=simage&img_url=https%3A%2F%2Fc8.alamy.com%2Fcomp%2F2BFYYP9%2Fcute-little-boy-eating-tangerine-isolated-on-white-2BFYYP9.jpg&from=tabbar&lr=213" target="_blank">is a site to conver note sheets into music</a> 
 <img src="https://github.com/blackcater/blackcater/blob/main/images/Hi.gif" height="32"/></h1>
-<h3 align="center"><i> Real magic in a couple of seconds </i></h3>
+<h3 align="center"><i> " Real magic in a couple of seconds! " </i></h3>
 <hr>
 To start the server:
 
