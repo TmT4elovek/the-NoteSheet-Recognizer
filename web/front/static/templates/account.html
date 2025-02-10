@@ -32,19 +32,18 @@
                 </script>
             </div>
         </nav>
-        <div class="text-content">
+        <div class="container">
+          <div class="text-content">
             <h2>Добро пожаловать в личный кабинет, {{ user }},<br>Мы рады знакомству</h2>
             <p>Здесь можно найти историю преобразований или выйти из системы</p>
+          </div>
+          <div>
+              <h2 class="text-content2">История</h2>
+                {% for i in list %}
+                    <li><a href="{{ file }}">{{ name-file }}</a>{{% i %}}</li>
+                    {% endfor %}
+            </div>
         </div>
-        <form>
-            <label class="text-content" for="history_of_operations">История запросов</label>
-            <select class="body" id="history_of_operations" name="history_of_operations">
-                <option value="screen_saver">Выберите вариант</option>
-                <option value="first_file">1</option>
-                <option value="second_file">2</option>
-                <option value="third_file">3</option>
-            </select>
-        </form>
         <div class="play-button">
             <span class="play">Запустить музыку</span>
             <i class="fas fa-play" onclick="click()"></i>
