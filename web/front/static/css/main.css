@@ -59,6 +59,11 @@ header .navbar{
   justify-content: space-between;
   align-items: center;
 }
+.container {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
 .upload_button{
   outline: none;
   color: #f2f2f2;
