@@ -10,7 +10,7 @@ The weights of the model have already been uploaded to the <i> web/backend/neura
 
 :white_check_mark: the code has passed all flake8 checks
 ## Dependencies
-- **os;**
+  - **os;**
 - [ ] Neural Network:
   - torch;
   - torchvision;
