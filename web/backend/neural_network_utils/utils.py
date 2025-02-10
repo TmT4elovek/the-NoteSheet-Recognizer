@@ -191,7 +191,7 @@ def find_staff_lines(obj_list, pred_note_tensor: torch.Tensor, pred_staff_tensor
 # ------------------------- LOAD -----------------------------------
 
 def load_chekpoint(device, model: nn.Module, file_name: str, optim=None):
-  state = torch.load(os.path.join(r'D:\Programming\mospredp\the-NoteSheet-Recognizer\web\backend\neural_network_utils\wght', file_name), map_location=torch.device(device))
+  state = torch.load(os.path.join(PATH_TO_WEIGHTS, file_name), map_location=torch.device(device))
   model.load_state_dict(state["model"])
   if optim:
     optim.load_state_dict(state["optimizer"])
