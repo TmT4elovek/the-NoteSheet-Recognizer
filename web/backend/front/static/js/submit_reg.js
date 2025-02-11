@@ -11,11 +11,17 @@ function submitReg(event) {
         headers: {
             'Content-Type': 'application/json'
         },
-        body: data
+        body: JSON.stringify(data)
     })
     .then(response => {
-        console.log('Good req', data);
-        window.location.href = 'http://127.0.0.1:8000/login';
+        if (response.status == 409) {
+            alert('User already exists');
+            return;
+        } else {
+        // console.log('Good req', data);
+        // window.location.href = 'http://127.0.0.1:8000/login';
+        return;
+        }
     })
     .catch(error => console.error(error))
     

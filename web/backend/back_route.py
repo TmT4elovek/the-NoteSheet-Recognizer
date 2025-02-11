@@ -36,7 +36,7 @@ async def get_user(user_id: int):
         user = db.query(User).filter(User.id == user_id).first()
         return user
 
-@back.post('/api/check-user')
+@back.post('/api/check-user') #! Login
 async def check_user(request: Request, response: Response, username: str = Body(embed=True), password: str = Body(embed=True)):
     with Session(engine) as db:
         try:
@@ -146,10 +146,15 @@ async def add_file(request: Request, response: Response, files: list[UploadFile]
 @back.post('/api/add-user/')
 async def add_user(request: Request, username: str = Body(embed=True, max_length=30), password: str = Body(embed=True, max_length=40)):
     with Session(engine) as db:
-        # insert new user into the database
-        user = User(name=username, password=password)
-        db.add(user)
-        db.commit()
+        user = db.query(User).filter(User.username == username).first()
+        if user is None:
+            # insert new user into the database
+            user = User(name=username, password=password)
+            db.add(user)
+            db.commit()
+        else:
+            raise HTTPException(409, 'User with this username already exists')
+
 
 @back.delete('/api/delete-user/{id}')
 async def delete_user(id: int):
