@@ -49,9 +49,10 @@ async def check_user(request: Request, response: Response, username: str = Body(
             response.set_cookie(config.JWT_ACCESS_COOKIE_NAME, access_token)
             response.set_cookie('username', user.username)
             response.set_cookie('id', user.id)
+            response.status_code = 200
             # return {'access_token': access_token}
-            # return response
-        # raise HTTPException(status_code=404, detail="Database error")
+            return response
+        raise HTTPException(status_code=404, detail="Database error")
 
 @back.get('/api/get-recognized-music-sheet/')
 async def get_recognized_music_sheet(request: Request):
