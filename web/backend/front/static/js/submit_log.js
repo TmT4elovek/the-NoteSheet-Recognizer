@@ -1,3 +1,15 @@
+function getCookie(name) {
+    let cookieArr = document.cookie.split("; ");
+    for(let i = 0; i < cookieArr.length; i++) {
+        let cookiePair = cookieArr[i].split("=");
+        if (name == cookiePair[0]) {
+            return cookiePair[1];
+        }
+    }
+    return null;
+}
+
+
 function submitLog(event) {
     // Prevent form submission
     event.preventDefault()
@@ -7,6 +19,7 @@ function submitLog(event) {
     console.log(formData)
     let data = Object.fromEntries(formData.entries());
     console.log(data)
+
     fetch('api/check-user', {
         method: 'POST',
         headers: {
@@ -27,4 +40,4 @@ function submitLog(event) {
         }
     })
     .catch(error => console.error(error));
-} 
+}

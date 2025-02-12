@@ -38,7 +38,7 @@ async def get_user(user_id: int):
         user = db.query(User).filter(User.id == user_id).first()
         return user
 
-@back.post('/api/check-user')
+@back.post('/api/check-user') #! Login
 async def check_user(request: Request, response: Response, username: str = Body(embed=True), password: str = Body(embed=True)):
     with Session(engine) as db:
         try:
@@ -51,9 +51,10 @@ async def check_user(request: Request, response: Response, username: str = Body(
             response.set_cookie(config.JWT_ACCESS_COOKIE_NAME, access_token)
             response.set_cookie('username', user.username)
             response.set_cookie('id', user.id)
+            response.status_code = 200
             # return {'access_token': access_token}
-            # return response
-        # raise HTTPException(status_code=404, detail="Database error")
+            return response
+        raise HTTPException(status_code=404, detail="Database error")
 
 @back.get('/api/get-recognized-music-sheet/')
 async def get_recognized_music_sheet(request: Request):
@@ -151,10 +152,15 @@ async def add_file(request: Request, response: Response, files: list[UploadFile]
 @back.post('/api/add-user/')
 async def add_user(request: Request, username: str = Body(embed=True, max_length=30), password: str = Body(embed=True, max_length=40)):
     with Session(engine) as db:
-        # insert new user into the database
-        user = User(name=username, password=password)
-        db.add(user)
-        db.commit()
+        user = db.query(User).filter(User.username == username).first()
+        if user is None:
+            # insert new user into the database
+            user = User(name=username, password=password)
+            db.add(user)
+            db.commit()
+        else:
+            raise HTTPException(409, 'User with this username already exists')
+
 
 @back.delete('/api/delete-user/{id}')
 async def delete_user(id: int):
