@@ -12,7 +12,7 @@ from datetime import timedelta
 front = APIRouter(tags=['Frontend'])
 
 
-templates = Jinja2Templates(r'web\backend\front\static\templates')
+templates = Jinja2Templates(r'/home/keglya300/the-NoteSheet-Recognizer/web/backend/front/static/templates')
 
 config = AuthXConfig()
 config.JWT_SECRET_KEY = 'secret'

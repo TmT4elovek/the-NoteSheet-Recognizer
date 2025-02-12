@@ -1,4 +1,6 @@
 import os
+import random
+import string
 
 from fastapi import FastAPI, Form, UploadFile, Body, HTTPException, Request, APIRouter
 from fastapi.responses import Response, RedirectResponse, FileResponse, StreamingResponse
@@ -80,7 +82,7 @@ async def history(request: Request, response: Response):
 
 
 @back.post('/api/create-recognized-music-sheet/')
-async def create_recognized_music_sheet(request: Request, response: Response):
+async def create_recognized_music_sheet(request: str, response: Response):
     music_sheet_id = request.cookies.get('sheets_ids')
     music_sheets = list()
     with Session(engine) as db:
@@ -99,15 +101,19 @@ async def create_recognized_music_sheet(request: Request, response: Response):
         return
     mp3 = recognize(images, yolov3_m, yolov3_l)
     mp3_byte = await mp3.read()
-    with Session(engine) as db:
-        # insert new file into the database
-        sheet = RecognizedMusicSheet(recognized_music=mp3_byte, user_id=request.cookies.get('id'))
-        sheet_id = sheet.id
-        db.add(sheet)
-        for i in music_sheets:
-            i.recognized_music_sheet = sheet
-        db.commit()
-    
+
+    name = random_text = ''.join(random.choices(string.ascii_letters + string.digits, k=10))
+    with open(f'buff/{name}.mp3', 'wb') as file:
+        file.write(mp3_byte.getvalue())
+        with Session(engine) as db:
+            # insert new file into the database
+            sheet = RecognizedMusicSheet(recognized_music=filer, user_id=request.cookies.get('id'))
+            sheet_id = sheet.id
+            db.add(sheet)
+            for i in music_sheets:
+                i.recognized_music_sheet = sheet
+            db.commit()
+    os.remove(f'buff/{name}.mp3')
     response = templates.TemplateResponse("home.html", {"request": request, "user": True, "audio": mp3.filename})
     response.set_cookie('rec_sheet_id', sheet_id)
     return response
